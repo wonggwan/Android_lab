@@ -1,2 +1,2 @@
 # Android_lab
-This are the lab assignments of Android
+These are the lab assignments of Android
