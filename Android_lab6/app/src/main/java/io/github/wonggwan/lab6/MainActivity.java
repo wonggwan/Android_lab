@@ -2,33 +2,25 @@ package io.github.wonggwan.lab6;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.app.Notification;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.os.health.PackageHealthStats;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 
@@ -53,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
-
-
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -67,22 +57,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
-
-
     private void init() {
         PlayPausebutton = (Button) findViewById(R.id.playpause);
         Stopbutton = (Button) findViewById(R.id.stop);
         Quitbutton = (Button) findViewById(R.id.quit);
         Condition = (TextView) findViewById(R.id.condition);
-
         cur = (TextView) findViewById(R.id.currentTime);
         dur = (TextView) findViewById(R.id.totaltime);
         seekBar = (SeekBar) findViewById(R.id.seekbar);
-
-
-
-
         ImageView imageView = (ImageView) findViewById(R.id.Image);
         animator = ObjectAnimator.ofFloat(imageView, "rotation", 0, 360);
         animator.setDuration(24000);
@@ -90,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
         animator.setRepeatCount(-1);
         animator.setRepeatMode(ValueAnimator.RESTART);
     }
-
-
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -101,10 +81,6 @@ public class MainActivity extends AppCompatActivity {
         bindServiceConnection();
         PlayPausebutton.setText("PLAY");
         Condition.setText("Stopped");
-
-
-
-
 
         final Thread mThread = new Thread()
         {
@@ -141,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                             seekBar.setMax(bundle.getInt("dur"));
                             cur.setText(time.format(bundle.getInt("cur")));
                             dur.setText(time.format(bundle.getInt("dur")));
-
 
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -230,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
                     Parcel reply = Parcel.obtain();
                     mBinder.transact(code,data,reply,0);
 
-                    
                     Bundle bundle = reply.readBundle();
                     cur.setText(time.format(bundle.getInt("cur")));
                     dur.setText(time.format(bundle.getInt("dur")));
@@ -258,5 +232,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            unbindService(serviceConnection);
+            serviceConnection = null;
+            try {
+                MainActivity.this.finish();
+                System.exit(0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return super.onKeyDown(keyCode,event);
+    }
 }

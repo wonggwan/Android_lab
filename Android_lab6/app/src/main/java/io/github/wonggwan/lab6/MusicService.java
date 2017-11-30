@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 
@@ -32,6 +34,7 @@ public class MusicService extends Service {
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
+
     public class MyBinder extends Binder {
         protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
             switch (code) {
@@ -132,6 +135,8 @@ public class MusicService extends Service {
             player = null;
         }
     }
+
+
 
     @Override
     public boolean onUnbind(Intent intent) {
