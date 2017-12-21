@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         myview = ((ListView)findViewById(R.id.Start));
         addbnt = (Button) findViewById(R.id.add);
-
         addbnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
