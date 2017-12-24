@@ -15,9 +15,9 @@ public class GitHub {
         this.login=login;
     }
 
-    public String getTitle() { return login; }
-    public String getSub1() { return id; }
-    public String getSub2() { return blog; }
+    public String getlogin() { return login; }
+    public String getid() { return id; }
+    public String getblog() { return blog; }
 
 }
 

@@ -9,8 +9,8 @@ public class Repos {
     private String description;
     private String language;
 
-    public String getTitle() { return name; }
-    public String getSub1() { return language; }
-    public String getSub2() { return description; }
+    public String getname() { return name; }
+    public String getlanguage() { return language; }
+    public String getdescription() { return description; }
 }
 

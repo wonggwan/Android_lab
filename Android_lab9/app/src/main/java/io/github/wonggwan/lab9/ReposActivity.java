@@ -57,16 +57,16 @@ public class ReposActivity extends Activity {
                 List<HashMap<String,String>> data = new ArrayList<>(repos.size());
                 for (Repos my: repos) {
                     HashMap<String,String> m = new HashMap<>();
-                    m.put("title",""+my.getTitle());
-                    m.put("sub1",""+my.getSub1());
-                    m.put("sub2",""+my.getSub2());
+                    m.put("name",""+my.getname());
+                    m.put("language",""+my.getlanguage());
+                    m.put("description",""+my.getdescription());
                     data.add(m);
                 }
                 SimpleAdapter sm= new SimpleAdapter(ReposActivity.this,
                         data,
                         R.layout.cardview,
-                        new String[]{"title","sub1","sub2"},
-                        new int[]{R.id.tv_title,R.id.tv_sub_1,R.id.tv_sub_2}
+                        new String[]{"name","language","description"},
+                        new int[]{R.id.showing1,R.id.showing2,R.id.showing3}
                 );
                 mylistview.setAdapter(sm);
             }

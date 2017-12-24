@@ -32,6 +32,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myviewholder>{
         void onItemClick(View view, int position);
         void onItemLongClick(View view , int position);
     }
+    public void create(List<GitHub> newlist) {
+        mylist = newlist;
+        notifyDataSetChanged();
+    }
 
     public void add(GitHub h) {
         mylist.add(h);
@@ -41,10 +45,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myviewholder>{
         mylist.remove(posititon);
         notifyDataSetChanged();
     }
-    public void create(List<GitHub> newlist) {
-        mylist = newlist;
-        notifyDataSetChanged();
-    }
+
 
     public GitHub getpos(int position) {
         return mylist.get(position);
@@ -64,19 +65,23 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myviewholder>{
         TextView sub2;
         public myviewholder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.tv_title);
-            sub1 = (TextView) itemView.findViewById(R.id.tv_sub_1);
-            sub2 = (TextView) itemView.findViewById(R.id.tv_sub_2);
+            title = (TextView) itemView.findViewById(R.id.showing1);
+            sub1 = (TextView) itemView.findViewById(R.id.showing2);
+            sub2 = (TextView) itemView.findViewById(R.id.showing3);
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mylist!=null? mylist.size():0;
     }
 
     @Override
     public void onBindViewHolder(final myviewholder holder, final int position) {
         final GitHub g = ((GitHub)mylist.get(position));
-
-        holder.title.setText(g.getTitle());
-        holder.sub1.setText("ID: "+g.getSub1());
-        holder.sub2.setText("Blog: "+g.getSub2());
+        holder.title.setText(g.getlogin());
+        holder.sub1.setText("ID: "+g.getid());
+        holder.sub2.setText("Blog: "+g.getblog());
 
         if (listener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -95,10 +100,5 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myviewholder>{
                     listener.onItemClick(holder.itemView, pos);
                 }});
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mylist!=null? mylist.size():0;
     }
 }

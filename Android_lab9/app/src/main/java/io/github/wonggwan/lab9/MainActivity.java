@@ -54,28 +54,17 @@ public class MainActivity extends AppCompatActivity {
         myview.setAdapter(myadapter);
     }
 
-    private void exec() {
-        bnt_clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchbox.setText("");
-                githubuser.clear();
-                myadapter.notifyDataSetChanged();
-            }
-        });
-        bnt_fetch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = searchbox.getText().toString();
-                if (username.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "用户名不可为空", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    startService(username);
-                }
-            }
-        });
+    private void startService(String name) {
+        Retrofit retrofit = ServiceFactory.createRetrofit();
+        ServiceFactory.GitHubService github =  retrofit.create(ServiceFactory.GitHubService.class);
+        Observable<GitHub> observable = github.getUser(name);
+        observable.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(github_observer);
+    }
 
+    private void exec() {
         github_observer = new Observer<GitHub>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -113,15 +102,26 @@ public class MainActivity extends AppCompatActivity {
                 myadapter.delete(position);
             }
         });
-    }
 
-    private void startService(String name) {
-        Retrofit retrofit = ServiceFactory.createRetrofit();
-        ServiceFactory.GitHubService github =  retrofit.create(ServiceFactory.GitHubService.class);
-        Observable<GitHub> observable = github.getUser(name);
-        observable.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(github_observer);
+        bnt_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchbox.setText("");
+                githubuser.clear();
+                myadapter.notifyDataSetChanged();
+            }
+        });
+        bnt_fetch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = searchbox.getText().toString();
+                if (username.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "用户名不可为空", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    startService(username);
+                }
+            }
+        });
     }
 }
