@@ -71,16 +71,18 @@ public class ReposActivity extends Activity {
                 mylistview.setAdapter(sm);
             }
 
-            @Override
-            public void onError(Throwable t) {
-                Toast.makeText(ReposActivity.this,"网络连接超时",Toast.LENGTH_LONG).show();
-                finish();
-            }
+
 
             @Override
             public void onComplete() {
                 loading.setVisibility(View.INVISIBLE);
                 mylistview.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Toast.makeText(ReposActivity.this,"网络连接超时",Toast.LENGTH_LONG).show();
+                finish();
             }
         };
     }

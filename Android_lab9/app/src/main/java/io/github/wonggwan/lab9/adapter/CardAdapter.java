@@ -23,9 +23,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myviewholder>{
         this.mylist = null;
     }
 
-    private OnItemClickLitener mOnItemClickLitener;
+    private OnItemClickLitener listener;
     public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
-        this.mOnItemClickLitener = mOnItemClickLitener;
+        this.listener = mOnItemClickLitener;
     }
 
     public interface OnItemClickLitener {
@@ -73,23 +73,26 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myviewholder>{
     @Override
     public void onBindViewHolder(final myviewholder holder, final int position) {
         final GitHub g = ((GitHub)mylist.get(position));
+
         holder.title.setText(g.getTitle());
         holder.sub1.setText("ID: "+g.getSub1());
         holder.sub2.setText("Blog: "+g.getSub2());
-        if (mOnItemClickLitener != null) {
+
+        if (listener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = holder.getLayoutPosition();
-                    mOnItemClickLitener.onItemClick(holder.itemView, pos);
-                }});
 
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
+                    holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            int pos = holder.getLayoutPosition();
+                            listener.onItemLongClick(holder.itemView, pos);
+                            return false;
+                        }});
+
                     int pos = holder.getLayoutPosition();
-                    mOnItemClickLitener.onItemLongClick(holder.itemView, pos);
-                    return false;
+                    listener.onItemClick(holder.itemView, pos);
                 }});
         }
     }
